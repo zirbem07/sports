@@ -67,6 +67,11 @@ angular.module('sports', ['ionic', 'sports.controllers', 'sports.services'])
           templateUrl: 'templates/tab-chats.html',
           controller: 'ChatsCtrl'
         }
+      },
+      resolve: {
+          myLeagues: function (ActiveLeagues, User) {
+              return ActiveLeagues.getMyLeagues(User.current.id);
+          }
       }
     })
     .state('tab.chat-detail', {

@@ -113,7 +113,7 @@ angular.module('sports.controllers', [])
                     //TODO: add league to active leagues
                     ActiveLeagues.subscribeToLeague(User.current.id, $scope.selectedLeague.id, $scope.selectedLeague.name)
                         .then(function(data){
-                            alert("Success!");
+                            $scope.selectedLeague.enrollment++;
                             $ionicLoading.hide();
                             $scope.closeModal();
                         });
@@ -122,19 +122,10 @@ angular.module('sports.controllers', [])
         }
     })
 
-    .controller('ChatsCtrl', function($scope, Chats) {
-        // With the new view caching in Ionic, Controllers are only called
-        // when they are recreated or on app start, instead of every page change.
-        // To listen for when this page is active (for example, to refresh data),
-        // listen for the $ionicView.enter event:
-        //
-        //$scope.$on('$ionicView.enter', function(e) {
-        //});
+    .controller('ChatsCtrl', function($scope, myLeagues) {
 
-        $scope.chats = Chats.all();
-        $scope.remove = function(chat) {
-            Chats.remove(chat);
-        }
+        console.log(myLeagues);
+
     })
 
     .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {

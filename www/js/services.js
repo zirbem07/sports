@@ -76,6 +76,24 @@ angular.module('sports.services', [])
            });
 
            return defer.promise;
+         },
+
+         getMyLeagues: function(userID) {
+
+             var defer = $q.defer();
+
+             var query = new Parse.Query(this);
+             query.equalTo("userID", userID);
+             query.find({
+                 success: function (leagues) {
+                     defer.resolve(leagues);
+                 },
+                 error: function (error) {
+                     defer.reject(error);
+                 }
+             });
+
+             return defer.promise;
          }
        }
    );

@@ -6,14 +6,14 @@
     </div>
     <ion-list>
 
-      <ion-item ng-repeat="league in leagues" class="item item-avatar item-button-right">
+      <ion-item ng-repeat="league in leagues" class="item item-avatar item-button-right" ng-click="openModal(league)">
         <img src="{{league.img}}">
         <h2>{{league.name}}</h2>
         <span class="row">
-          <p>Price: ${{league.price}}</p>
-          <p class="col-offset-10">Size: {{league.enrollment}}/{{league.size}}</p>
+          <p><i class="ion-social-usd"></i> {{league.price}}</p>
+          <p class="col-offset-20"><i class="ion-person-stalker"></i> {{league.enrollment}}/{{league.size}}</p>
+          <p class="col-offset-20"><i class="ion-ios-lightbulb"></i> {{league.GTD}}</p>
         </span>
-        <button style="margin-top: 10px" class="button balanced button-icon icon ion-checkmark-circled" ng-click="openModal(league)">
         </button>
       </ion-item>
 
