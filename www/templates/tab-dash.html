@@ -1,0 +1,22 @@
+<ion-view view-title="Open Leagues">
+  <ion-content >
+    <div class="bar bar-header bar-light item-input-inset">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input class="search-wrapper-light" type="text" ng-model="searchTerm" placeholder="Search...">
+    </div>
+    <ion-list>
+
+      <ion-item ng-repeat="league in leagues" class="item item-avatar item-button-right">
+        <img src="{{league.img}}">
+        <h2>{{league.name}}</h2>
+        <span class="row">
+          <p>Price: ${{league.price}}</p>
+          <p class="col-offset-10">Size: {{league.enrollment}}/{{league.size}}</p>
+        </span>
+        <button style="margin-top: 10px" class="button balanced button-icon icon ion-checkmark-circled" ng-click="openModal(league)">
+        </button>
+      </ion-item>
+
+    </ion-list>
+  </ion-content>
+</ion-view>

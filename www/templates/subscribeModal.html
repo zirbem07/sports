@@ -1,0 +1,27 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-dark">
+    <h1 class="title">{{selectedLeague.name}}</h1>
+    <button ng-click="closeModal()" class="button button-icon icon ion-ios-close-empty"></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item>
+        <strong>League Size: </strong> <span class="col-offset-33">{{selectedLeague.enrollment}}/{{selectedLeague.size}}</span>
+      </ion-item>
+      <ion-item>
+        <strong>Start Time: </strong> <span class="col-offset-33">{{selectedLeague.startTime}}</span>
+      </ion-item>
+      <ion-item>
+        <strong class="row">Payout: </strong>
+        <div class="row"><strong class="col-offset-10 col-25">1st</strong><span class="col-offset-33">${{(selectedLeague.price * selectedLeague.size) * .7}}</span></div>
+        <div class="row"><strong class="col-offset-10 col-25">2nd</strong><span class="col-offset-33">${{(selectedLeague.price * selectedLeague.size) * .2}}</span></div>
+        <div class="row"><strong class="col-offset-10 col-25">3rd</strong><span class="col-offset-33">${{(selectedLeague.price * selectedLeague.size) * .1}}</span></div>
+      </ion-item>
+    </ion-list>
+    <div class="spacer" style="height: 40px;"></div>
+    <button class="button button-balanced button-full" ng-click="subscribe()">
+      <i class="ion-cash"></i>
+      Subscribe
+    </button>
+  </ion-content>
+</ion-modal-view>
