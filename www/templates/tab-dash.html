@@ -6,7 +6,7 @@
     </div>
     <ion-list>
 
-      <ion-item ng-repeat="league in leagues" class="item item-avatar item-button-right" ng-click="openModal(league)">
+      <ion-item ng-repeat="league in leagues" class="item item-avatar" ng-click="openModal(league)">
         <img src="{{league.img}}">
         <h2>{{league.name}}</h2>
         <span class="row">
@@ -14,7 +14,6 @@
           <p class="col-offset-20"><i class="ion-person-stalker"></i> {{league.enrollment}}/{{league.size}}</p>
           <p class="col-offset-20"><i class="ion-ios-lightbulb"></i> {{league.GTD}}</p>
         </span>
-        </button>
       </ion-item>
 
     </ion-list>

@@ -1,5 +1,14 @@
-<ion-view view-title="Chats">
+<ion-view view-title="Active Leagues">
   <ion-content>
-
+    <ion-list>
+      <ion-item ng-repeat="league in myLeagues" class="item item-avatar item-icon-right" href="#/tab/chats/{{chat.id}}">
+        <img src="{{league.img}}">
+        <h2>{{league.leagueName}}</h2>
+        <div class="row">
+          <p>Position: 4/25</p>
+        </div>
+        <i class="icon ion-ios-arrow-right"></i>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

@@ -48,11 +48,21 @@ angular.module('sports.controllers', [])
         }
 
     })
+    .controller('RootCtrl', function($scope, GTD, User){
+
+        var userID = User.current.id;
+        $scope.badge = {};
+
+        GTD.countGTDs(userID).then(function(count) {
+            $scope.badge.gtdCount = count;
+        }, function(reason) {
+            alert('Failed: ' + reason);
+        });
+
+    })
     .controller('DashCtrl', function($scope, $state, openLeagues, Leagues, ActiveLeagues, $ionicModal, $ionicLoading, User) {
 
         $scope.leagues = [];
-
-        console.log(User.current);
 
         angular.forEach(openLeagues, function(value){
             switch(value.attributes.sport) {
@@ -77,7 +87,6 @@ angular.module('sports.controllers', [])
             animation: 'slide-in-up'
         }).then(function(modal) {
             $scope.modal = modal;
-            console.log(modal);
         });
 
 
@@ -111,7 +120,7 @@ angular.module('sports.controllers', [])
             Leagues.enrollInLeague($scope.selectedLeague.id).then(function(data){
                 if(data){
                     //TODO: add league to active leagues
-                    ActiveLeagues.subscribeToLeague(User.current.id, $scope.selectedLeague.id, $scope.selectedLeague.name)
+                    ActiveLeagues.subscribeToLeague(User.current.id, $scope.selectedLeague.id, $scope.selectedLeague.name, $scope.selectedLeague.sport)
                         .then(function(data){
                             $scope.selectedLeague.enrollment++;
                             $ionicLoading.hide();
@@ -124,7 +133,25 @@ angular.module('sports.controllers', [])
 
     .controller('ChatsCtrl', function($scope, myLeagues) {
 
-        console.log(myLeagues);
+        $scope.myLeagues = [];
+
+        angular.forEach(myLeagues, function(value){
+            switch(value.attributes.sport) {
+                case 'Football':
+                    value.attributes.img = "img/football.png";
+                    break;
+                case 'Basketball':
+                    value.attributes.img = "img/basketball.png";
+                    break;
+                case 'Baseball':
+                    value.attributes.img = "img/baseball.png";
+                    break;
+                default:
+                    value.attributes.img = "img/ionic.png";
+            }
+            value.attributes.id = value.id;
+            $scope.myLeagues.push(value.attributes);
+        });
 
     })
 
