@@ -1,4 +1,4 @@
-<ion-view view-title="Active Leagues">
+<ion-view view-title="Active Leagues" ng-cloak="">
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="league in myLeagues" class="item item-avatar item-icon-right" href="#/tab/chats/{{chat.id}}">
@@ -7,7 +7,7 @@
         <div class="row">
           <p>Position: 4/25</p>
         </div>
-        <i class="icon ion-ios-arrow-right"></i>
+        <i  ng-if="league.hasGTD" class="icon ion-ios-arrow-right balanced"></i>
       </ion-item>
     </ion-list>
   </ion-content>
