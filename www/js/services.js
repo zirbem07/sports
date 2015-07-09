@@ -121,6 +121,25 @@ angular.module('sports.services', [])
                 });
 
                 return defer.promise;
+            },
+
+            checkIfLeagueHasGTDs: function(userID, leagueID) {
+
+                var defer = $q.defer();
+                var query = new Parse.Query(this);
+
+                query.equalTo("userID", userID);
+                query.equalTo("leagueID", leagueID);
+                query.count({
+                    success: function (count) {
+                        defer.resolve(count);
+                    },
+                    error: function (error) {
+                        defer.reject(error);
+                    }
+                });
+
+                return defer.promise;
             }
         }
     );

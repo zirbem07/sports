@@ -3,6 +3,10 @@
     <form>
       <ion-list>
         <label class="item item-input">
+          <span class="input-label">Username</span>
+          <input ng-model="user.username" type="text" placeholder="">
+        </label>
+        <label class="item item-input">
           <span class="input-label">Email</span>
           <input ng-model="user.email" type="Email" placeholder="">
         </label>
@@ -15,6 +19,7 @@
           <input ng-model="user.password2" type="password" placeholder="">
         </label>
       </ion-list>
+      <div class="spacer" style="height: 40px;"></div>
       <button ng-click="signUp()" class="button button-dark button-block ">Sign up</button>
     </form>
   </ion-content>

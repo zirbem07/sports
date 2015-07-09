@@ -1,10 +1,10 @@
 angular.module('sports.controllers', [])
 
     .controller('LoginCtrl', function($scope, $state, User) {
-        $scope.user = {email: "test@test.com", password: "test"};
+        $scope.user = {};
 
         $scope.login = function() {
-            Parse.User.logIn($scope.user.email, $scope.user.password,
+            Parse.User.logIn($scope.user.username, $scope.user.password,
                 {
                     success: function(user){
                         User.current = Parse.User.current();
@@ -25,7 +25,7 @@ angular.module('sports.controllers', [])
 
             if($scope.user.password === $scope.user.password2){
                 Parse.User.signUp(
-                    $scope.user.email,
+                    $scope.user.username,
                     $scope.user.password,
                     {
                         email: $scope.user.email,
@@ -131,9 +131,10 @@ angular.module('sports.controllers', [])
         }
     })
 
-    .controller('ChatsCtrl', function($scope, myLeagues) {
+    .controller('ChatsCtrl', function($scope, myLeagues, GTD, User) {
 
         $scope.myLeagues = [];
+        var userID = User.current.id;
 
         angular.forEach(myLeagues, function(value){
             switch(value.attributes.sport) {
@@ -150,13 +151,22 @@ angular.module('sports.controllers', [])
                     value.attributes.img = "img/ionic.png";
             }
             value.attributes.id = value.id;
-            $scope.myLeagues.push(value.attributes);
+
+            GTD.checkIfLeagueHasGTDs(userID, value.attributes.leagueID).then(function(count){
+                if(count > 0){
+                    value.attributes.hasGTD = true;
+                } else {
+                    value.attributes.hasGTD = false;
+                }
+                $scope.myLeagues.push(value.attributes);
+            });
+
         });
 
     })
 
-    .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-        $scope.chat = Chats.get($stateParams.chatId);
+    .controller('ChatDetailCtrl', function($scope, $stateParams ) {
+
     })
 
     .controller('AccountCtrl', function($scope) {
