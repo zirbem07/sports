@@ -159,11 +159,9 @@ angular.module('sports.services', [])
 
             getGTD: function(userID, leagueID) {
 
-                alert(leagueID);
                 var defer = $q.defer();
 
                 var query = new Parse.Query(this);
-                alert(userID);
                 query.equalTo("userID", userID);
                 query.equalTo("leagueID", leagueID);
                 query.find({
@@ -182,6 +180,9 @@ angular.module('sports.services', [])
     );
 
     return GTD;
+})
+.factory('Account', function() {
+
 })
 .factory('User', function() {
   return {

@@ -72,6 +72,7 @@ angular.module('sports.controllers', [])
 
         $scope.leagues = [];
 
+
         angular.forEach(openLeagues, function(value){
             switch(value.attributes.sport) {
                 case 'Football':
@@ -100,6 +101,7 @@ angular.module('sports.controllers', [])
 
         $scope.openModal = function(league) {
             $scope.selectedLeague = league;
+            $scope.balance = User.current.attributes.balance;
             $scope.modal.show();
         };
         $scope.closeModal = function(response) {
@@ -180,18 +182,76 @@ angular.module('sports.controllers', [])
 
     })
 
-    .controller('ChatDetailCtrl', function($scope, $stateParams, User, GTD ) {
+    .controller('ChatDetailCtrl', function($scope, $stateParams, User, GTD, $ionicModal ) {
 
         var userID = User.current.id;
 
-        $scope.GTDs = GTD.getGTD(userID, $stateParams.leagueID).then(function(data){
-            console.log(data);
+        $ionicModal.fromTemplateUrl('templates/GTDModal.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $scope.modal = modal;
+        });
 
-        })
+        $scope.openModal = function(GTD) {
+          $scope.GTD = GTD.attributes;
+          $scope.GTD.id = GTD.id;
+          $scope.modal.show();
+        };
+
+        $scope.closeModal = function() {
+          $scope.modal.hide();
+
+        };
+
+        $scope.GTDs = GTD.getGTD(userID, $stateParams.leagueID).then(function(data){
+            if(data.length > 0){
+              $scope.openModal(data[0])
+            }
+
+        });
+
+        $scope.submit = function(){
+
+          $scope.closeModal();
+        }
     })
 
-    .controller('AccountCtrl', function($scope) {
-        $scope.settings = {
-            enableFriends: true
-        };
+    .controller('AccountCtrl', function($scope, $state, $ionicPopup) {
+
+      $scope.logout = function(){
+        Parse.User.logOut();
+        $state.go('login')
+      };
+
+
+      $scope.addFunds = function() {
+        $scope.data = {};
+
+        // An elaborate, custom popup
+        var myPopup = $ionicPopup.show({
+          template: '<input type="number" ng-model="data.amount">',
+          title: 'Add Funds',
+          subTitle: 'How much moneys you want bruh',
+          scope: $scope,
+          buttons: [
+            { text: 'Cancel' },
+            {
+              text: '<b>Add Funds</b>',
+              type: 'button-balanced',
+              onTap: function(e) {
+                if (!$scope.data.amount) {
+                  //don't allow the user to close unless he enters wifi password
+                  e.preventDefault();
+                } else {
+                  return $scope.data.amount;
+                }
+              }
+            }
+          ]
+        });
+        myPopup.then(function(res) {
+          console.log('Tapped!', res);
+        });
+      };
     });
