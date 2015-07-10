@@ -61,16 +61,31 @@ angular.module('sports.services', [])
          subscribeToLeague: function(userID, leagueID, leagueName, sport){
 
            var defer = $q.defer();
-           var activeLeague = new ActiveLeague();
 
-           activeLeague.set("userID", userID);
-           activeLeague.set("leagueID", leagueID);
-           activeLeague.set("leagueName", leagueName);
-           activeLeague.set("sport", sport);
-           activeLeague.set("score", 0);
-           activeLeague.save(null,{
-             success: function (league) {
-               defer.resolve(league);
+           var query = new Parse.Query(this);
+           query.equalTo("userID", userID);
+           query.equalTo("leagueID", leagueID);
+           query.count({
+             success: function (count) {
+               if(count < 1){
+                 var activeLeague = new ActiveLeague();
+
+                 activeLeague.set("userID", userID);
+                 activeLeague.set("leagueID", leagueID);
+                 activeLeague.set("leagueName", leagueName);
+                 activeLeague.set("sport", sport);
+                 activeLeague.set("score", 0);
+                 activeLeague.save(null,{
+                   success: function (league) {
+                     defer.resolve({type: "success", message: "Success"});
+                   },
+                   error: function (error) {
+                     defer.reject(error);
+                   }
+                 });
+               } else {
+                 defer.resolve({type: "error", message: "Error: you are already subscribed to this league!"})
+               }
              },
              error: function (error) {
                defer.reject(error);

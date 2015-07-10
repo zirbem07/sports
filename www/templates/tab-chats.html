@@ -3,11 +3,14 @@
     <ion-list>
       <ion-item ng-repeat="league in myLeagues" class="item item-avatar item-icon-right" href="#/tab/chats/{{chat.id}}">
         <img src="{{league.img}}">
-        <h2>{{league.leagueName}}</h2>
+        <div class="row">
+          <h2>{{league.leagueName}}</h2>
+          <span style="right: 54px; top: 25px" ng-if="league.hasGTD" class="badge badge-balanced">{{league.hasGTD}}</span>
+        </div>
         <div class="row">
           <p>Position: 4/25</p>
         </div>
-        <i  ng-if="league.hasGTD" class="icon ion-ios-arrow-right balanced"></i>
+        <i class="icon ion-ios-arrow-right"></i>
       </ion-item>
     </ion-list>
   </ion-content>

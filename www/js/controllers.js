@@ -41,6 +41,7 @@ angular.module('sports.controllers', [])
                             $state.go('tab.dash');
                         },
                         error: function(user, error){
+                            console.log(error);
                             alert("An Error occured :(");
                         }
                     }
@@ -98,8 +99,15 @@ angular.module('sports.controllers', [])
             $scope.selectedLeague = league;
             $scope.modal.show();
         };
-        $scope.closeModal = function() {
+        $scope.closeModal = function(response) {
             $scope.modal.hide();
+
+            var message = response.message;
+            $ionicLoading.show({
+              noBackdrop: true,
+              template: message,
+              duration: 2000
+            });
         };
         //Cleanup the modal when we're done with it!
         $scope.$on('$destroy', function() {
@@ -126,9 +134,10 @@ angular.module('sports.controllers', [])
                     //TODO: add league to active leagues
                     ActiveLeagues.subscribeToLeague(User.current.id, $scope.selectedLeague.id, $scope.selectedLeague.name, $scope.selectedLeague.sport)
                         .then(function(data){
+
                             $scope.selectedLeague.enrollment++;
                             $ionicLoading.hide();
-                            $scope.closeModal();
+                            $scope.closeModal(data);
                         });
                 }
             });
@@ -157,11 +166,8 @@ angular.module('sports.controllers', [])
             value.attributes.id = value.id;
 
             GTD.checkIfLeagueHasGTDs(userID, value.attributes.leagueID).then(function(count){
-                if(count > 0){
-                    value.attributes.hasGTD = true;
-                } else {
-                    value.attributes.hasGTD = false;
-                }
+
+                value.attributes.hasGTD = count;
                 $scope.myLeagues.push(value.attributes);
             });
 
