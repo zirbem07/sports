@@ -75,7 +75,7 @@ angular.module('sports', ['ionic', 'sports.controllers', 'sports.services'])
       }
     })
     .state('tab.chat-detail', {
-      url: '/chats/:chatId',
+      url: '/chats/:leagueID',
       views: {
         'tab-chats': {
           templateUrl: 'templates/chat-detail.html',

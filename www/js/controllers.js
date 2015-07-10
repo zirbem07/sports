@@ -1,7 +1,10 @@
 angular.module('sports.controllers', [])
 
     .controller('LoginCtrl', function($scope, $state, User) {
-        $scope.user = {};
+        $scope.user = {
+            username: "Dan",
+            password: "test"
+        };
 
         $scope.signUp = function(){
           $state.go('signUp');
@@ -101,13 +104,15 @@ angular.module('sports.controllers', [])
         };
         $scope.closeModal = function(response) {
             $scope.modal.hide();
+            if(response){
+                var message = response.message;
+                $ionicLoading.show({
+                    noBackdrop: true,
+                    template: message,
+                    duration: 2000
+                });
+            }
 
-            var message = response.message;
-            $ionicLoading.show({
-              noBackdrop: true,
-              template: message,
-              duration: 2000
-            });
         };
         //Cleanup the modal when we're done with it!
         $scope.$on('$destroy', function() {
@@ -175,8 +180,14 @@ angular.module('sports.controllers', [])
 
     })
 
-    .controller('ChatDetailCtrl', function($scope, $stateParams ) {
+    .controller('ChatDetailCtrl', function($scope, $stateParams, User, GTD ) {
 
+        var userID = User.current.id;
+
+        $scope.GTDs = GTD.getGTD(userID, $stateParams.leagueID).then(function(data){
+            console.log(data);
+
+        })
     })
 
     .controller('AccountCtrl', function($scope) {

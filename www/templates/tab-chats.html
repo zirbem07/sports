@@ -1,7 +1,7 @@
 <ion-view view-title="Active Leagues" ng-cloak="">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="league in myLeagues" class="item item-avatar item-icon-right" href="#/tab/chats/{{chat.id}}">
+      <ion-item ng-repeat="league in myLeagues" class="item item-avatar item-icon-right" href="#/tab/chats/{{league.leagueID}}">
         <img src="{{league.img}}">
         <div class="row">
           <h2>{{league.leagueName}}</h2>
