@@ -120,12 +120,32 @@ angular.module('sports.services', [])
 .factory('GTD', function($q){
     var GTD = Parse.Object.extend("GTD", {},
         {
+            updateAnswered: function(id){
+
+                var defer = $q.defer();
+                var query = new Parse.Query(this);
+
+                query.get(id, {
+                    success: function(GTD){
+                        GTD.set("answered", true);
+                        GTD.save();
+                        defer.resolve(GTD);
+                    },
+                    error: function(error){
+                        defer.reject(error);
+                    }
+                });
+
+                return defer.promise;
+            },
+
             countGTDs: function(userID) {
 
                 var defer = $q.defer();
                 var query = new Parse.Query(this);
 
                 query.equalTo("userID", userID);
+                query.equalTo("answered", false);
                 query.count({
                     success: function (count) {
                         defer.resolve(count);
@@ -145,6 +165,7 @@ angular.module('sports.services', [])
 
                 query.equalTo("userID", userID);
                 query.equalTo("leagueID", leagueID);
+                query.equalTo("answered", false);
                 query.count({
                     success: function (count) {
                         defer.resolve(count);
@@ -164,6 +185,7 @@ angular.module('sports.services', [])
                 var query = new Parse.Query(this);
                 query.equalTo("userID", userID);
                 query.equalTo("leagueID", leagueID);
+                query.equalTo("answered", false);
                 query.find({
                     success: function(GTD){
                         console.log(GTD);
@@ -183,6 +205,28 @@ angular.module('sports.services', [])
 })
 .factory('Account', function() {
 
+})
+.factory('ActiveGTD', function($q){
+    var ActiveGTD = Parse.Object.extend("ActiveGTD", {}, {
+
+        submitGTD: function(GTDResponse){
+
+            var defer = $q.defer();
+            var activeGTD = new ActiveGTD();
+
+            activeGTD.save(GTDResponse, {
+                success: function(activeGTD){
+                    defer.resolve(activeGTD);
+                },
+                error: function(error){
+                    defer.reject(error);
+                }
+            });
+            return defer.promise;
+        }
+    });
+
+    return ActiveGTD;
 })
 .factory('User', function() {
   return {

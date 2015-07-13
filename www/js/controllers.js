@@ -1,6 +1,6 @@
 angular.module('sports.controllers', [])
 
-    .controller('LoginCtrl', function($scope, $state, User) {
+    .controller('LoginCtrl', function($scope, $state, $ionicUser, User) {
         $scope.user = {
             username: "Dan",
             password: "test"
@@ -14,6 +14,11 @@ angular.module('sports.controllers', [])
             Parse.User.logIn($scope.user.username, $scope.user.password,
                 {
                     success: function(user){
+                        $ionicUser.identify({
+                            user_id: user.id,
+                            name: user.attributes.username,
+                            message: 'User Login'
+                        });
                         User.current = Parse.User.current();
                         $state.go('tab.dash');
                     },
@@ -40,6 +45,11 @@ angular.module('sports.controllers', [])
                     },
                     {
                         success: function(user){
+                            $ionicUser.identify({
+                                user_id: user.id,
+                                name: user.attributes.username,
+                                message: 'User SignUp'
+                            });
                             User.current = Parse.User.current();
                             $state.go('tab.dash');
                         },
@@ -182,7 +192,7 @@ angular.module('sports.controllers', [])
 
     })
 
-    .controller('ChatDetailCtrl', function($scope, $stateParams, User, GTD, $ionicModal ) {
+    .controller('ChatDetailCtrl', function($scope, $stateParams, User, GTD, ActiveGTD, $ionicModal, $ionicLoading) {
 
         var userID = User.current.id;
 
@@ -213,7 +223,28 @@ angular.module('sports.controllers', [])
 
         $scope.submit = function(){
 
-          $scope.closeModal();
+            $ionicLoading.show({
+                noBackdrop: true,
+                templateUrl: 'templates/subscribing.html'
+            });
+
+           var GTDResponse = {
+             userID: userID,
+             leagueGTD: $scope.GTD.leagueID,
+             activeLeagueID: $scope.GTD.activeLeagueID,
+             GTDID: $scope.GTD.id,
+             answer: $scope.GTD.choice
+           };
+
+          ActiveGTD.submitGTD(GTDResponse).then(function(response){
+              GTD.updateAnswered($scope.GTD.id).then(function(){
+                  $ionicLoading.hide();
+                  $scope.closeModal();
+              });
+          }, function(reason){
+            alert(reason);
+          });
+
         }
     })
 
