@@ -1,10 +1,7 @@
 angular.module('sports.controllers', [])
 
     .controller('LoginCtrl', function($scope, $state, $ionicUser, User) {
-        $scope.user = {
-            username: "Dan",
-            password: "test"
-        };
+        $scope.user = {};
 
         $scope.signUp = function(){
           $state.go('signUp');
@@ -30,7 +27,7 @@ angular.module('sports.controllers', [])
             )
         }
     })
-    .controller('SignUpCtrl', function($scope, $state, User) {
+    .controller('SignUpCtrl', function($scope, $state, $ionicUser, User) {
         $scope.user = {};
 
         $scope.signUp = function(){
@@ -114,6 +111,7 @@ angular.module('sports.controllers', [])
             $scope.balance = User.current.attributes.balance;
             $scope.modal.show();
         };
+
         $scope.closeModal = function(response) {
             $scope.modal.hide();
             if(response){
@@ -149,7 +147,11 @@ angular.module('sports.controllers', [])
             Leagues.enrollInLeague($scope.selectedLeague.id).then(function(data){
                 if(data){
                     //TODO: add league to active leagues
-                    ActiveLeagues.subscribeToLeague(User.current.id, $scope.selectedLeague.id, $scope.selectedLeague.name, $scope.selectedLeague.sport)
+                    ActiveLeagues.subscribeToLeague(
+                        User.current.id, $scope.selectedLeague.id,
+                        $scope.selectedLeague.name, $scope.selectedLeague.sport,
+                        User.current.attributes.username
+                    )
                         .then(function(data){
 
                             $scope.selectedLeague.enrollment++;
@@ -192,9 +194,14 @@ angular.module('sports.controllers', [])
 
     })
 
-    .controller('ChatDetailCtrl', function($scope, $stateParams, User, GTD, ActiveGTD, $ionicModal, $ionicLoading) {
+    .controller('ChatDetailCtrl', function($scope, $stateParams, User, ActiveLeagues, GTD, ActiveGTD, $ionicModal, $ionicLoading) {
 
         var userID = User.current.id;
+
+        ActiveLeagues.getScoreboard($stateParams.leagueID).then(function (scoreboard) {
+            console.log(scoreboard);
+            $scope.scoreboard = scoreboard;
+        });
 
         $ionicModal.fromTemplateUrl('templates/GTDModal.html', {
           scope: $scope,
@@ -211,14 +218,12 @@ angular.module('sports.controllers', [])
 
         $scope.closeModal = function() {
           $scope.modal.hide();
-
         };
 
         $scope.GTDs = GTD.getGTD(userID, $stateParams.leagueID).then(function(data){
             if(data.length > 0){
               $scope.openModal(data[0])
             }
-
         });
 
         $scope.submit = function(){

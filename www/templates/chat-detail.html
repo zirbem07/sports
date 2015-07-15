@@ -6,7 +6,11 @@
 -->
 <ion-view>
   <ion-content>
-
-
+    <div class="scoreboard">
+      <ion-list>
+        <ion-item class="item-divider-platform">Scoreboard</ion-item>
+        <ion-item ng-repeat="o in scoreboard">{{o.attributes.username}} --- {{o.attributes.score}}</ion-item>
+      </ion-list>
+    </div>
   </ion-content>
 </ion-view>

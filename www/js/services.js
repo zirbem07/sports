@@ -58,7 +58,7 @@ angular.module('sports.services', [])
 .factory('ActiveLeagues', function($q){
    var ActiveLeague = Parse.Object.extend("ActiveLeague", {},
        {
-         subscribeToLeague: function(userID, leagueID, leagueName, sport){
+         subscribeToLeague: function(userID, leagueID, leagueName, sport, username){
 
            var defer = $q.defer();
 
@@ -75,6 +75,7 @@ angular.module('sports.services', [])
                  activeLeague.set("leagueName", leagueName);
                  activeLeague.set("sport", sport);
                  activeLeague.set("score", 0);
+                 activeLeague.set("username", username);
                  activeLeague.save(null,{
                    success: function (league) {
                      defer.resolve({type: "success", message: "Success"});
@@ -111,6 +112,24 @@ angular.module('sports.services', [])
              });
 
              return defer.promise;
+         },
+
+         getScoreboard: function(leagueID) {
+           var defer = $q.defer();
+
+           var query = new Parse.Query(this);
+           query.equalTo("leagueID", leagueID);
+           query.descending("score");
+           query.find({
+               success: function(scoreboard){
+                   defer.resolve(scoreboard);
+               },
+               error: function(error){
+                   defer.reject(error);
+               }
+           });
+
+           return defer.promise;
          }
        }
    );
