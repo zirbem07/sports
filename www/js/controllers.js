@@ -159,6 +159,10 @@ angular.module('sports.controllers', [])
                             $scope.closeModal(data);
                         });
                 }
+            }, function(error){
+
+              $scope.closeModal({message: error});
+
             });
         }
     })

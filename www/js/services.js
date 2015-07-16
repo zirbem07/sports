@@ -39,7 +39,7 @@ angular.module('sports.services', [])
                       }
                     });
                   } else {
-                    defer.reject("Error: League is Full");
+                    defer.reject("Error: League is already Full");
                   }
                 },
                 error: function (object, error) {
